@@ -1,412 +1,320 @@
 package co.edu.uniquindio.poo.model;
 
-import javax.swing.JOptionPane;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Biblioteca {
 
     private String nombre;
-    private Bibliotecario[] listaBibliotecarios;
-    private Libro[] listaLibros;
-    private Prestamo[] listaPretamos;
-    private Estudiante[] listaEstudiantes;
+    private LinkedList<Bibliotecario> listaBibliotecarios;
+    private LinkedList<Libro> listaLibros;
+    private HashMap<String, Prestamo> listaPrestamos;
+    private HashMap<String, Estudiante> listaEstudiantes;
 
     public Biblioteca(String nombre) {
         this.nombre = nombre;
+        this.listaBibliotecarios = new LinkedList<Bibliotecario>();
+        this.listaLibros = new LinkedList<Libro>();
+        this.listaPrestamos = new HashMap<String, Prestamo>();
+        this.listaEstudiantes = new HashMap<String, Estudiante>();
+        ;
     }
 
-
-    //CRUD ESTUDIANTE
-
-
+    // CRUD LIBRO
 
     /**
-     * Busca un estudiante
-     * @param estudiante
-     * @return
+     * Añade un libro a la lista de libros si no existe ya.
+     * 
+     * @param libro El libro a añadir.
+     * @return Un mensaje indicando si el libro fue añadido correctamente o si ya
+     *         existía.
      */
-    public Estudiante buscarEstudiante(Estudiante estudiante){
-        for (Estudiante estudianteaux : listaEstudiantes) {
-            if (estudianteaux.equals(estudiante)) {
-                return estudianteaux;
-            } 
+    public String añadirLibro(Libro libro) {
+        String mensaje = "El libro ya existe";
+        if (!listaLibros.contains(libro)) {
+            listaLibros.add(libro);
+            mensaje = "Libro añadido correctamente";
         }
-        return null;
+        return mensaje;
     }
 
     /**
-     * Busca posicion disponible en listaEstudiantes
-     * @param lEstudiantes
-     * @return
+     * Elimina un libro de la lista de libros si existe.
+     * 
+     * @param libro El libro a eliminar.
+     * @return Un mensaje indicando si el libro fue eliminado correctamente o si no
+     *         existía.
      */
-    public int posDisponibleEst(Estudiante[] listaEstudiantes){
-        int disponible = -1;
-
-        for (int i = 0; i < listaEstudiantes.length; i++) {
-            if (listaEstudiantes[i] != null) {
-                disponible = i;
-                break;
-            }
+    public String eliminarLibro(Libro libro) {
+        String mensaje = "El libro no existe";
+        if (listaLibros.contains(libro)) {
+            listaLibros.remove(libro);
+            mensaje = "Libro eliminado correctamente";
         }
-        return disponible;
-    }
-
-
-    /**
-     * Crea un estudiante con JOption
-     */
-    public void crearEstudiante(){
-        String nombre = null;
-        nombre = strNotNull(nombre);
-        String id = null;
-        id = strNotNull(id);
-        String telefono = null;
-        telefono = strNotNull(telefono);
-        String correo = null;
-        correo = strNotNull(correo);
-
-        Estudiante estudiante = new Estudiante(nombre, id, telefono, correo);
-
-        String mensaje = "No se pudo añadir el contacto, es posible que no haya posicion o que ya exista el contacto";
-        Estudiante estudianteEncontrado = buscarEstudiante(estudiante);
-        int i = posDisponibleEst(listaEstudiantes);
-        if (estudianteEncontrado == null && i >= 0) {
-            listaEstudiantes[i] = estudiante;
-            mensaje = "Contacto añadido exitosamente";
-        }
-        JOptionPane.showMessageDialog(null, mensaje);
-    }
-
-
-
-    /**
-     * elimina un estudiante
-     * @param estudiante
-     */
-    public void eliminarEstudiante(Estudiante estudiante) {
-        String mensaje = "No se pudo eliminar el contacto porque no se encontró en la lista";
-        for (int index = 0; index < listaEstudiantes.length; index++) {
-            if (listaEstudiantes[index] != null) {
-                if (listaEstudiantes[index].equals(estudiante)) {
-                    listaEstudiantes[index] = null;
-                    mensaje = "Contacto eliminado exitosamente";
-                }
-            }
-        }
-        JOptionPane.showMessageDialog(null, mensaje);
-    }
-
-
-    /**
-     * Edita un espacio de la listaEstudiantes, borra el estudiante existente y permite ingresarlo de nuevo
-     * @param estudiante
-     */
-    public void editarEstudiante(Estudiante estudiante){
-        String mensaje = "Estudiante no encontrado";
-        Estudiante estudianteaux = buscarEstudiante(estudiante);
-        if (estudianteaux != null) {
-            eliminarEstudiante(estudiante);
-            crearEstudiante();
-            mensaje = "Estudiante editado exitosamente";
-        }
-        JOptionPane.showMessageDialog(null, mensaje);
-    }
-
-
-
-
-
-    //CRUD BIBLIOTECARIO 
-
-
-    /**
-     * buscar bibliotecario en listaBibliotecario
-     * @param bibliotecario
-     * @return
-     */
-    public Bibliotecario buscarBibliotecario(Bibliotecario bibliotecario) {
-        for (Bibliotecario biblioAux : listaBibliotecarios) {
-            if (biblioAux != null && biblioAux.equals(bibliotecario)) {
-                return biblioAux;
-            }
-        }
-        return null;
+        return mensaje;
     }
 
     /**
-     * pos disponible en listaBibliotecario
-     * @return
-     */
-    public int posDisponibleBibl() {
-        for (int i = 0; i < listaBibliotecarios.length; i++) {
-            if (listaBibliotecarios[i] == null) {
-                return i;
-            }
-        }
-        return -1; // No hay espacio disponible
-    }
-
-    /**
-     * Crear bibliotecario con Joption
-     */
-    public void crearBibliotecario() {
-        String nombre = null;
-        strNotNull(nombre);
-        String id = null;
-        strNotNull(id);
-        String telefono = null;
-        strNotNull(telefono);
-        String correo = null;
-        strNotNull(correo);
-        double salario = 0;
-        salario = verifDouble(salario);
-
-        Bibliotecario bibliotecario = new Bibliotecario(nombre, id, telefono, correo, salario);
-
-        String mensaje = "No se pudo añadir el bibliotecario, es posible que no haya posición o que ya exista.";
-        Bibliotecario bibliotecarioEncontrado = buscarBibliotecario(bibliotecario);
-        int i = posDisponibleBibl();
-        if (bibliotecarioEncontrado == null && i >= 0) {
-            listaBibliotecarios[i] = bibliotecario;
-            mensaje = "Bibliotecario añadido exitosamente.";
-        }
-        JOptionPane.showMessageDialog(null, mensaje);
-    }
-
-
-    /**
-     * Eliminar bibliotecario
-     * @param bibliotecario
-     */
-    public void eliminarBibliotecario(Bibliotecario bibliotecario) {
-        String mensaje = "No se pudo eliminar el bibliotecario porque no se encontró en la lista.";
-        for (int index = 0; index < listaBibliotecarios.length; index++) {
-            if (listaBibliotecarios[index] != null && listaBibliotecarios[index].equals(bibliotecario)) {
-                listaBibliotecarios[index] = null;
-                mensaje = "Bibliotecario eliminado exitosamente.";
-                break;
-            }
-        }
-        JOptionPane.showMessageDialog(null, mensaje);
-    }
-
-    /**
-     * Editar espacio en listaBibliotecario, elimina el elemento existente y lo reescribe.
-     * @param bibliotecario
-     */
-    public void editarBibliotecario(Bibliotecario bibliotecario) {
-        String mensaje = "Bibliotecario no encontrado.";
-        Bibliotecario biblioAux = buscarBibliotecario(bibliotecario);
-        if (biblioAux != null) {
-            eliminarBibliotecario(bibliotecario);
-            crearBibliotecario();
-            mensaje = "Bibliotecario editado exitosamente.";
-        }
-        JOptionPane.showMessageDialog(null, mensaje);
-    }
-
-
-
-    //CRUD LIBRO
-
-    /**
-     * Busca un libro en listaLibros
-     * @param libro
-     * @return
+     * Busca un libro en la lista de libros.
+     * 
+     * @param libro El libro a buscar.
+     * @return El libro encontrado o null si no se encuentra en la lista.
      */
     public Libro buscarLibro(Libro libro) {
-        for (Libro libroAux : listaLibros) {
-            if (libroAux != null && libroAux.equals(libro)) {
-                return libroAux;
+        for (int i = 0; i < listaLibros.size(); i++) {
+            if (listaLibros.get(i).equals(libro)) {
+                return libro;
             }
         }
         return null;
     }
 
     /**
-     * buscar pos disponible en listaLibros
-     * @return
+     * Edita un libro existente en la lista reemplazándolo por uno nuevo.
+     * 
+     * @param libro      El libro actual que se desea editar.
+     * @param nuevoLibro El nuevo libro con la información actualizada.
+     * @return Un mensaje indicando si el libro fue encontrado y editado o no.
      */
-    public int posDisponibleLibro() {
-        for (int i = 0; i < listaLibros.length; i++) {
-            if (listaLibros[i] == null) {
-                return i;
+    public String editarLibro(Libro libro, Libro nuevoLibro) {
+        String mensaje = "No se encontró el libro";
+        if (buscarLibro(libro) != null) {
+            listaLibros.set(listaLibros.indexOf(libro), nuevoLibro);
+            mensaje = "Libro editado correctamente";
+        }
+        return mensaje;
+    }
+
+    // CRUD BIBLIOTECARIO
+
+    /**
+     * Añade un bibliotecario a la lista si no existe ya.
+     * 
+     * @param bibliotecario El bibliotecario a añadir.
+     * @return Un mensaje indicando si el bibliotecario fue añadido correctamente o
+     *         si ya existía.
+     */
+    public String añadirBibliotecrio(Bibliotecario bibliotecario) {
+        String mensaje = "Bibliotecario ya existe";
+        if (!listaBibliotecarios.contains(bibliotecario)) {
+            listaBibliotecarios.add(bibliotecario);
+            mensaje = "Bibliotecario añadido correctamente";
+        }
+        return mensaje;
+    }
+
+    /**
+     * Elimina un bibliotecario de la lista si existe.
+     * 
+     * @param bibliotecario El bibliotecario a eliminar.
+     * @return Un mensaje indicando si el bibliotecario fue eliminado correctamente
+     *         o si no existía.
+     */
+    public String eliminarBibliotecrio(Bibliotecario bibliotecario) {
+        String mensaje = "Bibliotecario no existe";
+        if (listaBibliotecarios.contains(bibliotecario)) {
+            listaBibliotecarios.remove(bibliotecario);
+            mensaje = "Bibliotecario eliminado correctamente";
+        }
+
+        return mensaje;
+    }
+
+    /**
+     * Busca un bibliotecario en la lista.
+     * 
+     * @param bibliotecario El bibliotecario a buscar.
+     * @return El bibliotecario encontrado o null si no se encuentra en la lista.
+     */
+    public Bibliotecario buscarBibliotecario(Bibliotecario bibliotecario) {
+        for (int i = 0; i < listaBibliotecarios.size(); i++) {
+            if (listaBibliotecarios.get(i).equals(bibliotecario)) {
+                return bibliotecario;
             }
         }
-        return -1; // No hay espacio disponible
+        return null;
     }
 
     /**
-     * Crea un libro
+     * Edita un bibliotecario existente en la lista reemplazándolo por uno nuevo.
+     * 
+     * @param bibliotecario      El bibliotecario actual que se desea editar.
+     * @param nuevoBibliotecario El nuevo bibliotecario con la información
+     *                           actualizada.
+     * @return Un mensaje indicando si el bibliotecario fue encontrado y editado o
+     *         no.
      */
-    public void crearLibro() {
-        String codigo = null;
-        strNotNull(codigo);
-        String isbn = null;
-        strNotNull(isbn);
-        String autor = null;
-        strNotNull(autor);
-        String titulo = null;
-        strNotNull(titulo);
-        String editorial = null;
-        strNotNull(editorial);
-        int unidadesDisponibles = 0;
-        unidadesDisponibles = verifInt(unidadesDisponibles);
-        LocalDate fecha = null;
-        fecha = verifDate(fecha);
-
-
-        Libro libro = new Libro(codigo, isbn, autor, titulo, editorial, fecha, unidadesDisponibles);
-
-        String mensaje = "No se pudo añadir el libro, es posible que no haya posición o que ya exista.";
-        Libro libroEncontrado = buscarLibro(libro);
-        int i = posDisponibleLibro();
-        if (libroEncontrado == null && i >= 0) {
-            listaLibros[i] = libro;
-            mensaje = "Libro añadido exitosamente.";
+    public String editarBibliotecario(Bibliotecario bibliotecario, Bibliotecario nuevBibliotecario) {
+        String mensaje = "No se encontró el elemento";
+        if (buscarBibliotecario(bibliotecario) != null) {
+            listaBibliotecarios.set(listaBibliotecarios.indexOf(bibliotecario), nuevBibliotecario);
         }
-        JOptionPane.showMessageDialog(null, mensaje);
+        return mensaje;
+    }
+
+    // CRUD ESTUDIANTE
+
+    /**
+     * Añade un estudiante a la lista si no existe ya.
+     * 
+     * @param estudiante El estudiante a añadir.
+     * @return Un mensaje indicando si el estudiante fue añadido correctamente o si
+     *         ya existía.
+     */
+    public String añadirEstudiante(Estudiante estudiante) {
+        String mensaje = "Estudiante ya existe";
+        if (listaEstudiantes.containsValue(estudiante) == false) {
+            listaEstudiantes.put(estudiante.getId(), estudiante);
+            mensaje = "Estudiante añadido exitosamente";
+        }
+
+        return mensaje;
     }
 
     /**
-     * elimina un libro
-     * @param libro
+     * Elimina un estudiante de la lista si existe.
+     * 
+     * @param id El ID del estudiante a eliminar.
+     * @return Un mensaje indicando si el estudiante fue eliminado correctamente o
+     *         si no existía.
      */
-    public void eliminarLibro(Libro libro) {
-        String mensaje = "No se pudo eliminar el libro porque no se encontró en la lista.";
-        for (int index = 0; index < listaLibros.length; index++) {
-            if (listaLibros[index] != null && listaLibros[index].equals(libro)) {
-                listaLibros[index] = null;
-                mensaje = "Libro eliminado exitosamente.";
-                break;
-            }
+    public String eliminarEstudiante(String id) {
+        String mensaje = "Estudiante no existe";
+        if (listaEstudiantes.get(id) != null) {
+            listaEstudiantes.remove(id);
+            mensaje = "Estudiante eliminado correctamente";
         }
-        JOptionPane.showMessageDialog(null, mensaje);
+
+        return mensaje;
     }
 
     /**
-     * Reescribe un elemento de listaLibros
-     * @param libro
+     * Busca un estudiante en la lista por su ID.
+     * 
+     * @param id El ID del estudiante a buscar.
+     * @return El estudiante encontrado o null si no se encuentra en la lista.
      */
-    public void editarLibro(Libro libro) {
-        String mensaje = "Libro no encontrado.";
-        Libro libroAux = buscarLibro(libro);
-        if (libroAux != null) {
-            eliminarLibro(libro);
-            crearLibro();
-            mensaje = "Libro editado exitosamente.";
+    public Estudiante buscarEstudianteId(String id) {
+        return listaEstudiantes.get(id);
+    }
+
+    /**
+     * Edita un estudiante existente en la lista reemplazándolo por uno nuevo.
+     * 
+     * @param id              El ID del estudiante actual que se desea editar.
+     * @param estudianteNuevo El nuevo estudiante con la información actualizada.
+     * @return Un mensaje indicando si el estudiante fue encontrado y editado o no.
+     */
+    public String editarEstudiante(String id, Estudiante estudianteNuevo) {
+        String mensaje = "No se encontró";
+        if (buscarEstudianteId(id) != null) {
+            listaEstudiantes.put(id, estudianteNuevo);
+            mensaje = "Elemento editado correctamente";
         }
-        JOptionPane.showMessageDialog(null, mensaje);
+        return mensaje;
     }
 
+    // CRUD PRESTAMO
+    /**
+     * Añade un préstamo a la lista si no existe ya.
+     * 
+     * @param prestamo El préstamo a añadir.
+     * @return Un mensaje indicando si el préstamo fue añadido correctamente o si ya
+     *         existía.
+     */
+    public String añadirPrestamo(Prestamo prestamo) {
+        String mensaje = "Prestamo ya existe";
+        if (!listaPrestamos.containsValue(prestamo)) {
+            listaPrestamos.put(prestamo.getCodigo(), prestamo);
+            mensaje = "Prestamo añadido exitosamente";
+        }
 
+        return mensaje;
+    }
 
+    /**
+     * Elimina un préstamo de la lista si existe.
+     * 
+     * @param codigo El código del préstamo a eliminar.
+     * @return Un mensaje indicando si el préstamo fue eliminado correctamente o si
+     *         no existía.
+     */
+    public String eliminarPrestamo(String codigo) {
+        String mensaje = "Prestamo no existe";
+        if (listaPrestamos.get(codigo) == null) {
+            listaPrestamos.remove(codigo);
+            mensaje = "Prestamo eliminado correctamente";
+        }
 
-    //**Getters & Setters 
+        return mensaje;
+    }
 
-    public Bibliotecario[] getListaBibliotecarios() {
-        return listaBibliotecarios;
+    /**
+     * Busca un préstamo en la lista por su código.
+     * 
+     * @param codigo El código del préstamo a buscar.
+     * @return El préstamo encontrado o null si no se encuentra en la lista.
+     */
+    public Prestamo buscarPrestamoCodigo(String codigo) {
+        return listaPrestamos.get(codigo);
     }
-    public void setListaBibliotecarios(Bibliotecario[] listaBibliotecarios) {
-        this.listaBibliotecarios = listaBibliotecarios;
+
+    /**
+     * Edita un préstamo existente en la lista reemplazándolo por uno nuevo.
+     * 
+     * @param codigo        El código del préstamo actual que se desea editar.
+     * @param prestamoNuevo El nuevo préstamo con la información actualizada.
+     * @return Un mensaje indicando si el préstamo fue encontrado y editado o no.
+     */
+
+    public String editarPrestamo(String codigo, Prestamo prestamoNuevo) {
+        String mensaje = "No se encontró";
+        if (buscarEstudianteId(codigo) != null) {
+            listaPrestamos.put(codigo, prestamoNuevo);
+            mensaje = "Elemento editado correctamente";
+        }
+        return mensaje;
     }
-    public Libro[] getListaLibros() {
-        return listaLibros;
-    }
-    public void setListaLibros(Libro[] listaLibros) {
-        this.listaLibros = listaLibros;
-    }
-    public Prestamo[] getListaPretamos() {
-        return listaPretamos;
-    }
-    public void setListaPretamos(Prestamo[] listaPretamos) {
-        this.listaPretamos = listaPretamos;
-    }
+
+    // **Getters & Setters
+
     public String getNombre() {
         return nombre;
     }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public Estudiante[] getListaEstudiantes() {
+
+    public LinkedList<Bibliotecario> getListaBibliotecarios() {
+        return listaBibliotecarios;
+    }
+
+    public void setListaBibliotecarios(LinkedList<Bibliotecario> listaBibliotecarios) {
+        this.listaBibliotecarios = listaBibliotecarios;
+    }
+
+    public LinkedList<Libro> getListaLibros() {
+        return listaLibros;
+    }
+
+    public void setListaLibros(LinkedList<Libro> listaLibros) {
+        this.listaLibros = listaLibros;
+    }
+
+    public HashMap<String, Prestamo> getListaPrestamos() {
+        return listaPrestamos;
+    }
+
+    public void setListaPrestamos(HashMap<String, Prestamo> listaPrestamos) {
+        this.listaPrestamos = listaPrestamos;
+    }
+
+    public HashMap<String, Estudiante> getListaEstudiantes() {
         return listaEstudiantes;
     }
-    public void setListaEstudiantes(Estudiante[] listaEstudiantes) {
+
+    public void setListaEstudiantes(HashMap<String, Estudiante> listaEstudiantes) {
         this.listaEstudiantes = listaEstudiantes;
-    }
-
-
-    /**
-     * metodo para solicitar y verificar un campo tipo String no esta vacio con Joption
-     * @param str
-     * @return
-     */
-
-    public String strNotNull(String str){
-
-        while (true){
-            str = JOptionPane.showInputDialog("Ingrese el nombre del contacto");
-            // Validar si el input es null (cuando el usuario cancela) o si está vacío
-            if (str == null || str.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "El campo no puede estar vacío o ser cancelado.");
-                
-            }else {
-                return str;
-                
-            }
-    
-            }
-    }
-
-    /**
-     * metodo para solicitar y verficar que un campo tipo int sea de tipo int con Joption
-     * @param n
-     * @return
-     */
-    public int verifInt(int n){
-        while (true) {
-            try {
-                n = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la edad del contacto"));
-                return n;
-            } catch (NumberFormatException nfe){
-                JOptionPane.showMessageDialog(null, "La edad tiene que ser un numero");
-        }
-    }
-    }
-
-    /**
-     * metodo para solicitar y verficar que un campo tipo double sea de tipo double con Joption
-     * @param n
-     * @return
-     */
-    public double verifDouble(double n){
-        while (true) {
-            try {
-                String input = JOptionPane.showInputDialog("Ingrese un número (por ejemplo, el salario)");
-                n = Double.parseDouble(input);
-                return n;
-            } catch (NumberFormatException nfe) {
-                JOptionPane.showMessageDialog(null, "El valor tiene que ser un número válido");
-            }
-        }
-    }
-
-    /**
-     * metodo para solicitar y verficar que un campo tipo LocalDate sea de tipo LocalDate con formato YYYY-MM-DD con Joption
-     * @param fecha
-     * @return
-     */
-    public LocalDate verifDate(LocalDate fecha){
-        while (true) {
-            try{
-                String input = JOptionPane.showInputDialog("Ingrese la fecha de publicación (formato: YYYY-MM-DD)");
-                fecha = LocalDate.parse(input, DateTimeFormatter.ISO_LOCAL_DATE);
-                return fecha;
-            } catch(DateTimeParseException dtpe){
-                JOptionPane.showMessageDialog(null, "Formato de fecha inválido. Asegúrese de usar YYYY-MM-DD.");
-            }
-        }
     }
 }
