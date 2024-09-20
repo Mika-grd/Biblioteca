@@ -215,6 +215,8 @@ public class Biblioteca {
     }
 
     // CRUD PRESTAMO
+
+
     /**
      * Añade un préstamo a la lista si no existe ya.
      * 
@@ -276,6 +278,10 @@ public class Biblioteca {
         return mensaje;
     }
 
+
+
+
+    
     // **Getters & Setters
 
     public String getNombre() {
