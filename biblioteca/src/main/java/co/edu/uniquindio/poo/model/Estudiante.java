@@ -1,26 +1,22 @@
 package co.edu.uniquindio.poo.model;
 
+import java.util.LinkedList;
+
 public class Estudiante {
 
     private String nombre;
     private String id; 
     private String telefono;
     private String correo;
-    private Prestamo[] listaPretamos;
+    private LinkedList<Prestamo> listaPretamos;
 
-    public Prestamo[] getListaPretamos() {
-        return listaPretamos;
-    }
-
-    public void setListaPretamos(Prestamo[] listaPretamos) {
-        this.listaPretamos = listaPretamos;
-    }
 
     public Estudiante(String nombre, String id, String telefono, String correo){
         this.nombre = nombre;
         this.id = id;
         this.telefono = telefono;
         this.correo = correo;
+        this.listaPretamos =  new LinkedList<Prestamo>();
 
     }
 
@@ -55,4 +51,13 @@ public class Estudiante {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
+
+    public LinkedList<Prestamo> getListaPretamos() {
+        return listaPretamos;
+    }
+
+    public void setListaPretamos(LinkedList<Prestamo> listaPretamos) {
+        this.listaPretamos = listaPretamos;
+    }
+    
 }

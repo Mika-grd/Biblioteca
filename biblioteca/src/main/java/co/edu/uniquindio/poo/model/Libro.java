@@ -1,6 +1,7 @@
 package co.edu.uniquindio.poo.model;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 
 public class Libro {
 
@@ -11,7 +12,7 @@ public class Libro {
     private String editorial;
     private LocalDate fecha;
     private int unidadesDisponibles;
-    private DetallePrestamo[] listaDetallePrestamos;
+    private LinkedList<Prestamo> listaPrestamos;
 
     public Libro(String codigo, String isbn, String autor, String titulo, String editorial, LocalDate fecha,
             int unidadesDisponibles) {
@@ -22,16 +23,10 @@ public class Libro {
         this.editorial = editorial;
         this.fecha = fecha;
         this.unidadesDisponibles = unidadesDisponibles;
+        this.listaPrestamos = new LinkedList<>();
 
     }
 
-    public DetallePrestamo[] getListaDetallePrestamos() {
-        return listaDetallePrestamos;
-    }
-
-    public void setListaDetallePrestamos(DetallePrestamo[] listaDetallePrestamos) {
-        this.listaDetallePrestamos = listaDetallePrestamos;
-    }
 
     public String getCodigo() {
         return codigo;
@@ -88,4 +83,14 @@ public class Libro {
     public void setUnidadesDisponibles(int unidadesDisponibles) {
         this.unidadesDisponibles = unidadesDisponibles;
     }
+
+    public LinkedList<Prestamo> getListaPrestamos() {
+        return listaPrestamos;
+    }
+
+
+    public void setListaPrestamos(LinkedList<Prestamo> listaPrestamos) {
+        this.listaPrestamos = listaPrestamos;
+    }
+    
 }
