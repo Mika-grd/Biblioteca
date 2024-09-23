@@ -4,23 +4,22 @@ public class DetallePrestamo {
     
     private double subTotal;
     private int cantidad;
-    private String nombre;
+    private String isbn;
 
-    public DetallePrestamo(String nombre ,double subTotal, int cantidad){
-        this.nombre = nombre;
+    public DetallePrestamo(String isbn ,double subTotal, int cantidad){
+        this.isbn = isbn;
         this.subTotal = subTotal;
         this.cantidad = cantidad;
 
     }
 
-    
 
     public String getNombre() {
-        return nombre;
+        return isbn;
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.isbn = nombre;
     }
 
 
