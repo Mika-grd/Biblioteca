@@ -409,12 +409,21 @@ public class Biblioteca {
         return null;
     }
     
-    //3.3
+    /**
+     * 3.3
+     * @param nombre
+     * @return
+     */
     public int cantidadPrestamosLibro(String nombre){
         int numeroPrestamos = 0; 
         for (int index = 0; index < listaPrestamos.size(); index++) {
             Prestamo prestamoaux = listaPrestamos.get(index);
-            
+            HashMap lista = prestamoaux.getListaDetallePrestamos();
+            Libro libroaux = null;
+            // crear buscarLibroNombre!!!
+            if (lista.containsValue(libroaux)) {
+                numeroPrestamos ++;
+            }
         }
         return numeroPrestamos;
     }
@@ -422,12 +431,35 @@ public class Biblioteca {
     
     //3.4 = editarLibro.
 
-    //4.3 Entregar Prestamo 
+    //4.3 Entregar Prestamo.{estadificil}
 
-    //4.4 Consultar datos de un prestamo dado su codigo
+    /**
+     * 4.4 Consultar datos de un prestamo dado su codigo
+     * @param codigoPrestamo
+     * @return
+     */
     public String datosPrestamoSegunCodigo(String codigoPrestamo){
-        
+        Prestamo prestamo = listaPrestamos.get(codigoPrestamo);
+        return prestamo.toString();
     }
+
+    //4.5 Mostrar la cantidad de prestamos realizados por cada empleado
+
+
+
+    //5.1 datos del estudiante con mas prestamos(sin importar que libro)
+
+    //5.2 total de dinero recaudado por la empresa
+
+
+
+    //clase llamada buscar libro nombre
+    //preguntarle a miguel por que hace todo con i
+
+
+
+
+
 
     
     // **Getters & Setters
