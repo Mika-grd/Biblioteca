@@ -8,7 +8,7 @@ public class Estudiante {
     private String id; 
     private String telefono;
     private String correo;
-    private LinkedList<Prestamo> listaPretamos;
+    private LinkedList<Prestamo> listaPrestamosDeUnEstudiante;
 
 
     public Estudiante(String nombre, String id, String telefono, String correo){
@@ -16,7 +16,7 @@ public class Estudiante {
         this.id = id;
         this.telefono = telefono;
         this.correo = correo;
-        this.listaPretamos =  new LinkedList<Prestamo>();
+        this.listaPrestamosDeUnEstudiante =  new LinkedList<Prestamo>();
 
     }
 
@@ -52,12 +52,14 @@ public class Estudiante {
         this.correo = correo;
     }
 
-    public LinkedList<Prestamo> getListaPretamos() {
-        return listaPretamos;
+    public LinkedList<Prestamo> getListaPrestamosDeUnEstudiante() {
+        return listaPrestamosDeUnEstudiante;
     }
 
-    public void setListaPretamos(LinkedList<Prestamo> listaPretamos) {
-        this.listaPretamos = listaPretamos;
+    public void setListaPrestamosDeUnEstudiante(LinkedList<Prestamo> listaPrestamosDeUnEstudiante) {
+        this.listaPrestamosDeUnEstudiante = listaPrestamosDeUnEstudiante;
     }
+
+    
     
 }

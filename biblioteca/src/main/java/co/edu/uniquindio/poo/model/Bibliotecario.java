@@ -1,6 +1,7 @@
 package co.edu.uniquindio.poo.model;
 
 import java.util.LinkedList;
+import java.time.LocalDate;
 
 public class Bibliotecario {
 
@@ -9,16 +10,18 @@ public class Bibliotecario {
     private String telefono;
     private String correo;
     private double salario;
-    private LinkedList<Prestamo> listaPrestamos;
+    private LocalDate añoContratacion;
+    private LinkedList<Prestamo> listaPrestamosDeUnBibliotecario;
 
 
-    public Bibliotecario(String nombre, String id, String telefono, String correo, double salario){
+    public Bibliotecario(String nombre, String id, String telefono, String correo, double salario, LocalDate añoContratacion){
         this.nombre = nombre;
         this.id = id;
         this.telefono = telefono;
         this.correo = correo;
         this.salario = salario;
-        this.listaPrestamos =  new LinkedList<Prestamo>();
+        this.añoContratacion = añoContratacion;
+        this.listaPrestamosDeUnBibliotecario =  new LinkedList<Prestamo>();
         
     }
 
@@ -62,11 +65,20 @@ public class Bibliotecario {
         this.salario = salario;
     }
 
-    public LinkedList<Prestamo> getListaPrestamos() {
-        return listaPrestamos;
+    public LinkedList<Prestamo> getListaPrestamosDeUnBibliotecario() {
+        return listaPrestamosDeUnBibliotecario;
     }
 
-    public void setListaPrestamos(LinkedList<Prestamo> listaPrestamos) {
-        this.listaPrestamos = listaPrestamos;
+    public void setListaPrestamosDeUnBibliotecario(LinkedList<Prestamo> listaPrestamosDeUnBibliotecario) {
+        this.listaPrestamosDeUnBibliotecario = listaPrestamosDeUnBibliotecario;
     }
+
+    public LocalDate getAñoContratacion() {
+        return añoContratacion;
+    }
+
+    public void setAñoContratacion(LocalDate añoContratacion) {
+        this.añoContratacion = añoContratacion;
+    }
+    
 }

@@ -2,6 +2,7 @@ package co.edu.uniquindio.poo.model;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.time.LocalDate;
 
 public class Biblioteca {
 
@@ -225,15 +226,17 @@ public class Biblioteca {
      * @return Un mensaje indicando si el préstamo fue añadido correctamente o si ya
      *         existía.
      */
-    public String añadirPrestamo(Prestamo prestamo) {
-        String mensaje = "Prestamo ya existe";
+    public String añadirPrestamo(Prestamo prestamo, Bibliotecario bibliotecario, Estudiante estudiante) {
+        String mensaje = "";
         if (!listaPrestamos.containsValue(prestamo)) {
             listaPrestamos.put(prestamo.getCodigo(), prestamo);
+            bibliotecario.getListaPrestamosDeUnBibliotecario().add(prestamo);
+            estudiante.getListaPrestamosDeUnEstudiante().add(prestamo);
+            
             mensaje = "Prestamo añadido exitosamente";
         }
-
         return mensaje;
-    }
+    } 
 
     /**
      * Elimina un préstamo de la lista si existe.
@@ -242,10 +245,13 @@ public class Biblioteca {
      * @return Un mensaje indicando si el préstamo fue eliminado correctamente o si
      *         no existía.
      */
-    public String eliminarPrestamo(String codigo) {
+    public String eliminarPrestamo(String codigo, Bibliotecario bibliotecario, Estudiante estudiante) {
         String mensaje = "Prestamo no existe";
         if (listaPrestamos.get(codigo) == null) {
             listaPrestamos.remove(codigo);
+            bibliotecario.getListaPrestamosDeUnBibliotecario().remove(listaPrestamos.get(codigo));
+            estudiante.getListaPrestamosDeUnEstudiante().remove(listaPrestamos.get(codigo));
+            
             mensaje = "Prestamo eliminado correctamente";
         }
 
@@ -380,7 +386,7 @@ public class Biblioteca {
     //OTROS METODOS
     
     /**
-     * 
+     * busca un libro por su isbn
      * @param isbn
      * @return
      */
@@ -395,7 +401,7 @@ public class Biblioteca {
 
 
     /**
-     * 
+     * busca un libro por su codigo
      * @param codigo
      * @return
      */
@@ -408,30 +414,48 @@ public class Biblioteca {
         }
         return null;
     }
-    
+
     /**
+     * busca un libro por su nombre
+     * @param nombre
+     * @return el libro c:
+     */
+    public Libro buscarLibroNombre(String nombre){
+        for (Libro libroaux : listaLibros) {
+            if (libroaux.getTitulo().equals(nombre)) {
+                return libroaux;
+            }
+        }
+        return null;
+    }
+    
+    /**Consultar dado el nombre del Libro la cantidad de préstamos en el cual está incluido, es decir si un Libro está incluido en dos préstamos la respuesta sería 2).
      * 3.3
      * @param nombre
      * @return
      */
+
     public int cantidadPrestamosLibro(String nombre){
         int numeroPrestamos = 0; 
-        for (int index = 0; index < listaPrestamos.size(); index++) {
-            Prestamo prestamoaux = listaPrestamos.get(index);
-            HashMap lista = prestamoaux.getListaDetallePrestamos();
-            Libro libroaux = null;
-            // crear buscarLibroNombre!!!
-            if (lista.containsValue(libroaux)) {
-                numeroPrestamos ++;
-            }
+        for (Prestamo prestamo : listaPrestamos.values()) {
+            for (DetallePrestamo detalle : prestamo.getListaDetallePrestamos().values()) {
+                Libro libro = buscarLibroPorIsbn(detalle.getIsbn());
+                if (libro.getTitulo().equalsIgnoreCase(nombre)) {
+                    numeroPrestamos++;
+                }
+            } 
         }
+        
         return numeroPrestamos;
     }
-
     
     //3.4 = editarLibro.
 
-    //4.3 Entregar Prestamo.{estadificil}
+    //4.3 Entregar Prestamo
+
+    public void entregarPrestamo(){
+        
+    }
 
     /**
      * 4.4 Consultar datos de un prestamo dado su codigo
@@ -443,25 +467,107 @@ public class Biblioteca {
         return prestamo.toString();
     }
 
-    //4.5 Mostrar la cantidad de prestamos realizados por cada empleado
+    /**
+     * 4.5 Mostrar la cantidad de prestamos realizados por cada empleado
+     */
+    public void mostrarCantidadPrestamosCdaBibliotecarios(){
+        String mensaje="Bibliotecarios con su respectivo numero de prestamos: \n";
+        for (Bibliotecario bibliotecario : listaBibliotecarios) {
+            int numeroPrestamos = bibliotecario.getListaPrestamosDeUnBibliotecario().size();
+            String nombreBibliotecario = bibliotecario.getNombre();
+            mensaje+= nombreBibliotecario +": "+ numeroPrestamos + "\n";
+        }
+
+        System.out.println(mensaje);
+    }
 
 
+    /**
+     * 5.1 datos del estudiante con mas prestamos(sin importar que libro)
+     * @return String con los datos del estudiante con mas prestamos
+     */
+    public String estudianteMasPrestamos(){
+        Estudiante estudianteMasPrestamos = null;
+        int numeroMasPrestamos = 0;
+        for (Estudiante estudiante : listaEstudiantes.values()) {
+            int numeroPrestamos = estudiante.getListaPrestamosDeUnEstudiante().size();
+            if (numeroPrestamos>numeroMasPrestamos){
+                numeroMasPrestamos = numeroPrestamos;
+                estudianteMasPrestamos = estudiante;
+            }
+        }
+        if (estudianteMasPrestamos==null){
+            return "No existen prestamos";
+        }else{
+            return (estudianteMasPrestamos.toString());
+        }
+        
+    }
 
-    //5.1 datos del estudiante con mas prestamos(sin importar que libro)
+    /**
+     * 
+     * @param codigoPrestamo
+     * @return Total de un prestamo
+     */
+    public double calcularTotalPrestamo(String codigoPrestamo){
+        double total = 0;
+        Prestamo prestamoaux = listaPrestamos.get(codigoPrestamo);
+        HashMap <String, DetallePrestamo>listaDetalles = prestamoaux.getListaDetallePrestamos();
 
-    //5.2 total de dinero recaudado por la empresa
-
-
-
-    //clase llamada buscar libro nombre
-    //preguntarle a miguel por que hace todo con i
-
-
-
-
-
-
+        for (DetallePrestamo detalle : listaDetalles.values()) {
+            double n = detalle.getSubTotal();
+            total+= n;
+            //me ayudas a revisar si el return anterior esta bueno? vale 
+        }
+        return total;
+    }
     
+    /**
+     * 5.2 total de dinero recaudado por la empresa
+     * @return double total de dinero recaudado por la empresa
+     */
+    public double dinero(){
+        double totalDinero = 0;
+        for (Prestamo prestamo : listaPrestamos.values()) {
+            double n = prestamo.getTotal();
+            totalDinero += n;
+        }
+        
+        return totalDinero;
+    }
+
+
+    /**
+     * 5.3 dinero a pagar salarios
+     * @return Salario total de todos los bibliotecarios.
+     */
+    public double pagarSalarios(){
+        double salarios= 0;
+        for (Bibliotecario bibliotecario : listaBibliotecarios) {
+            salarios += pagarBibliotecario(bibliotecario);
+        }
+        return salarios;
+    }
+ 
+    /**
+     * 
+     * @param bibliotecario
+     * @return Sueldo de un bibliotecario.
+     */
+    public double pagarBibliotecario(Bibliotecario bibliotecario){
+        int añosAntiguedad = LocalDate.now().getYear() - bibliotecario.getAñoContratacion().getYear();
+        double sueldoEmpleado=0;
+        for (Prestamo prestamo : bibliotecario.getListaPrestamosDeUnBibliotecario()) {
+            double valorPrestamo = prestamo.getTotal();
+            double porcentajeEdadAumento = añosAntiguedad*0.02;
+            sueldoEmpleado += (valorPrestamo*0.2)+(valorPrestamo*(porcentajeEdadAumento));
+            
+        }
+        return sueldoEmpleado;
+    }
+
+
+
     // **Getters & Setters
 
     public String getNombre() {

@@ -1,7 +1,6 @@
 package co.edu.uniquindio.poo.model;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.HashMap;
 
 public class Prestamo {
@@ -10,22 +9,24 @@ public class Prestamo {
     private String codigo;
     private double total;
     private HashMap<String, DetallePrestamo> listaDetallePrestamos;
-    private LinkedList<Bibliotecario> listaPrestamosBibliotecarios;
-    private LinkedList<Estudiante> listaPrestamosEstudiantes;
-
-    public Prestamo(LocalDate fechaPrestamo, LocalDate fechaEntrega, String codigo, double total) {
+    private Bibliotecario bibliotecarioPrestamo;
+    private Estudiante estudiantesPrestamo;
+ 
+    public Prestamo(LocalDate fechaPrestamo, LocalDate fechaEntrega, String codigo, double total,
+            HashMap<String, DetallePrestamo> listaDetallePrestamos, Bibliotecario bibliotecarioPrestamo,
+            Estudiante estudiantesPrestamo) {
         this.fechaPrestamo = fechaPrestamo;
         this.fechaEntrega = fechaEntrega;
         this.codigo = codigo;
         this.total = total;
-        this.listaDetallePrestamos = new HashMap<String, DetallePrestamo>();
-        this.listaPrestamosBibliotecarios = new LinkedList<Bibliotecario>();
-        this.listaPrestamosEstudiantes = new LinkedList<Estudiante>();
-
+        this.listaDetallePrestamos = listaDetallePrestamos;
+        this.bibliotecarioPrestamo = bibliotecarioPrestamo;
+        this.estudiantesPrestamo = estudiantesPrestamo;
     }
 
     
     // Setters & Getters :D
+
 
     public LocalDate getFechaPrestamo() {
         return fechaPrestamo;
@@ -59,20 +60,24 @@ public class Prestamo {
         this.total = total;
     }
 
-    public LinkedList<Bibliotecario> getListaPrestamosBibliotecarios() {
-        return listaPrestamosBibliotecarios;
+    
+    public Bibliotecario getBibliotecarioPrestamo() {
+        return bibliotecarioPrestamo;
     }
 
-    public void setListaPrestamosBibliotecarios(LinkedList<Bibliotecario> listaPrestamosBibliotecarios) {
-        this.listaPrestamosBibliotecarios = listaPrestamosBibliotecarios;
+
+    public void setBibliotecarioPrestamo(Bibliotecario bibliotecarioPrestamo) {
+        this.bibliotecarioPrestamo = bibliotecarioPrestamo;
     }
 
-    public LinkedList<Estudiante> getListaPrestamosEstudiantes() {
-        return listaPrestamosEstudiantes;
+
+    public Estudiante getEstudiantesPrestamo() {
+        return estudiantesPrestamo;
     }
 
-    public void setListaPrestamosEstudiantes(LinkedList<Estudiante> listaPrestamosEstudiantes) {
-        this.listaPrestamosEstudiantes = listaPrestamosEstudiantes;
+
+    public void setEstudiantesPrestamo(Estudiante estudiantesPrestamo) {
+        this.estudiantesPrestamo = estudiantesPrestamo;
     }
 
     public HashMap<String, DetallePrestamo> getListaDetallePrestamos() {
