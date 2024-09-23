@@ -14,11 +14,11 @@ public class DetallePrestamo {
     }
 
 
-    public String getNombre() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setNombre(String nombre) {
+    public void setIsbn(String nombre) {
         this.isbn = nombre;
     }
 

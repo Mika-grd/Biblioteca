@@ -69,6 +69,7 @@ public class Biblioteca {
         return null;
     }
 
+
     /**
      * Edita un libro existente en la lista reemplazándolo por uno nuevo.
      * 
@@ -306,16 +307,6 @@ public class Biblioteca {
         return "Detalle del producto añadido correctamente.";
     }
 
-    
-    private Libro buscarLibroPorIsbn(String isbn) {
-        for (Libro libro : listaLibros) {
-            if (libro.getIsbn().equals(isbn)) {
-                return libro;
-            }
-        }
-        return null;
-    }
-
 
     /**
      * Elimina un detalle de préstamo asociado a un producto por su nombre.
@@ -352,41 +343,91 @@ public class Biblioteca {
      * @return El detalle de préstamo encontrado o null si no se encuentra en la
      *         lista.
      */
-    public DetallePrestamo buscarDetalleProducto(String codigoPrestamo,String isbn) {
+    public DetallePrestamo buscarDetallePrestamo(String codigoPrestamo,String isbn) {
         Prestamo prestamo = listaPrestamos.get(codigoPrestamo);
         return prestamo.getListaDetallePrestamos().get(isbn);
     }
 
-    /**
-     * Edita el detalle de un producto en el préstamo.
-     * 
-     * @param nombreProducto El nombre del producto que se desea editar.
-     * @param nuevaCantidad  La nueva cantidad del producto.
-     * @param nuevoSubtotal  El nuevo subtotal del producto.
-     * @return Un mensaje indicando si el detalle fue editado correctamente o si no
+    
+     /**
+      * Edita el detalle de un producto en el préstamo.
+      * @param codigoPrestamo
+      * @param isbn
+      * @param nuevaCantidad  La nueva cantidad del producto.
+      * @param nuevoSubtotal  El nuevo subtotal del producto.
+      * @return Un mensaje indicando si el detalle fue editado correctamente o si no
      *         se encontró el producto.
-     */
-    public String editarDetalleProducto(StringString nombreProducto, int nuevaCantidad, double nuevoSubtotal) {
-        DetallePrestamo detalle = listaDetallePrestamos.get(nombreProducto);
-
-        if (detalle != null) {
-            // Actualizamos los valores del detalle existente
-            detalle.setCantidad(nuevaCantidad);
-            detalle.setSubTotal(nuevoSubtotal);
-            return "Detalle del producto editado correctamente";
-        } else {
-            return "Producto no encontrado en el préstamo";
+      */
+    public String editarDetallePrestamo(String codigoPrestamo, String isbn, int nuevaCantidad, double nuevoSubtotal) {
+        Prestamo prestamo = listaPrestamos.get(codigoPrestamo);
+        if (prestamo ==null){
+            return "Prestamo no encontrado.";
         }
+        
+        DetallePrestamo detalle = prestamo.getListaDetallePrestamos().get(isbn);
+        if (detalle ==null) {
+            return "Detalle no encontrado.";
+        }
+        detalle.setIsbn(isbn);
+        detalle.setCantidad(nuevaCantidad);
+        detalle.setSubTotal(nuevoSubtotal);
+
+        return "Detalle del producto editado correctamente";
+         
     }
 
 
-
-
-
     //OTROS METODOS
+    
+    /**
+     * 
+     * @param isbn
+     * @return
+     */
+    private Libro buscarLibroPorIsbn(String isbn) {
+        for (Libro libro : listaLibros) {
+            if (libro.getIsbn().equals(isbn)) {
+                return libro;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * 
+     * @param codigo
+     * @return
+     */
+    public Libro buscarLibroCodigo(String codigo){
+        for (int index = 0; index < listaLibros.size(); index++) {
+            String codigoaux = listaLibros.get(index).getCodigo();
+            if (codigo.equals(codigoaux)) {
+                return listaLibros.get(index);
+            }
+        }
+        return null;
+    }
+    
+    //3.3
+    public int cantidadPrestamosLibro(String nombre){
+        int numeroPrestamos = 0; 
+        for (int index = 0; index < listaPrestamos.size(); index++) {
+            Prestamo prestamoaux = listaPrestamos.get(index);
+            
+        }
+        return numeroPrestamos;
+    }
 
     
+    //3.4 = editarLibro.
 
+    //4.3 Entregar Prestamo 
+
+    //4.4 Consultar datos de un prestamo dado su codigo
+    public String datosPrestamoSegunCodigo(String codigoPrestamo){
+        
+    }
 
     
     // **Getters & Setters
