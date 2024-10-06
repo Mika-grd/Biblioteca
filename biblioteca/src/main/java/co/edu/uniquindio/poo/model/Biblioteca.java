@@ -96,7 +96,7 @@ public class Biblioteca {
      * @return Un mensaje indicando si el bibliotecario fue añadido correctamente o
      *         si ya existía.
      */
-    public String añadirBibliotecrio(Bibliotecario bibliotecario) {
+    public String añadirBibliotecario(Bibliotecario bibliotecario) {
         String mensaje = "Bibliotecario ya existe";
         if (!listaBibliotecarios.contains(bibliotecario)) {
             listaBibliotecarios.add(bibliotecario);
@@ -112,7 +112,7 @@ public class Biblioteca {
      * @return Un mensaje indicando si el bibliotecario fue eliminado correctamente
      *         o si no existía.
      */
-    public String eliminarBibliotecrio(Bibliotecario bibliotecario) {
+    public String eliminarBibliotecario(Bibliotecario bibliotecario) {
         String mensaje = "Bibliotecario no existe";
         if (listaBibliotecarios.contains(bibliotecario)) {
             listaBibliotecarios.remove(bibliotecario);
@@ -134,6 +134,15 @@ public class Biblioteca {
                 return bibliotecario;
             }
         }
+
+
+
+
+
+
+
+
+
         return null;
     }
 
@@ -285,102 +294,7 @@ public class Biblioteca {
         return mensaje;
     }
 
-     //CRUD DETALLES PRÉSTAMO
-
-
-    /**
-     * Metodo para añadir un detalle a un prestamo
-     * @param codigoPrestamo
-     * @param isbn
-     * @param subtotal
-     * @param cantidad
-     * @return Un mensaje indicando que el DetallePrestamo se agrego, no existía el prestamo o no habían suficientes unidades disponibles para realizarlo.
-     */
-    public String añadirDetallePrestamo(String codigoPrestamo, String isbn, double subtotal, int cantidad) {
-        Prestamo prestamo = listaPrestamos.get(codigoPrestamo);
-        Libro libro = buscarLibroPorIsbn(isbn);
-
-        if (prestamo == null){
-            return "Prestamo no encontrado.";
-        }
-        if (libro == null || libro.getUnidadesDisponibles()<cantidad){
-            return "No hay suficientes unidades disponibles.";
-        }
-
-        libro.setUnidadesDisponibles(libro.getUnidadesDisponibles() - cantidad);//actualizacion de cantidad ded libros
-        prestamo.getListaDetallePrestamos().put(isbn, new DetallePrestamo(isbn, subtotal, cantidad));
-
-        return "Detalle del producto añadido correctamente.";
-    }
-
-
-    /**
-     * Elimina un detalle de préstamo asociado a un producto por su nombre.
-     * @param codigoPrestamo
-     * @param isbn
-     * @return Un mensaje indicando si el detalle fue eliminado correctamente o si
-     *         no se encontró el producto.
-     */
-    public String eliminarDetalleProducto(String codigoPrestamo,String isbn) {
-        Prestamo prestamo = listaPrestamos.get(codigoPrestamo);
-        if  (prestamo == null){
-            return "Prestamo no encontrado";
-        }
-
-        DetallePrestamo detalle = prestamo.getListaDetallePrestamos().get(isbn);
-        if (detalle == null){
-            return "Detalle no encontrado en el prestamo";
-        }
-
-        Libro libro = buscarLibroPorIsbn(isbn);
-        
-        if (libro != null) {
-            libro.setUnidadesDisponibles(libro.getUnidadesDisponibles() + detalle.getCantidad());
-        }
-        prestamo.getListaDetallePrestamos().remove(isbn);
-
-        return "Detalle eliminado correctamente.";
-    }
-
-    /**
-     * Busca un detalle de préstamo por el nombre del producto.
-     * @param codigoPrestamo
-     * @param isbn
-     * @return El detalle de préstamo encontrado o null si no se encuentra en la
-     *         lista.
-     */
-    public DetallePrestamo buscarDetallePrestamo(String codigoPrestamo,String isbn) {
-        Prestamo prestamo = listaPrestamos.get(codigoPrestamo);
-        return prestamo.getListaDetallePrestamos().get(isbn);
-    }
-
-    
-     /**
-      * Edita el detalle de un producto en el préstamo.
-      * @param codigoPrestamo
-      * @param isbn
-      * @param nuevaCantidad  La nueva cantidad del producto.
-      * @param nuevoSubtotal  El nuevo subtotal del producto.
-      * @return Un mensaje indicando si el detalle fue editado correctamente o si no
-     *         se encontró el producto.
-      */
-    public String editarDetallePrestamo(String codigoPrestamo, String isbn, int nuevaCantidad, double nuevoSubtotal) {
-        Prestamo prestamo = listaPrestamos.get(codigoPrestamo);
-        if (prestamo ==null){
-            return "Prestamo no encontrado.";
-        }
-        
-        DetallePrestamo detalle = prestamo.getListaDetallePrestamos().get(isbn);
-        if (detalle ==null) {
-            return "Detalle no encontrado.";
-        }
-        detalle.setIsbn(isbn);
-        detalle.setCantidad(nuevaCantidad);
-        detalle.setSubTotal(nuevoSubtotal);
-
-        return "Detalle del producto editado correctamente";
-         
-    }
+     
 
 
     //OTROS METODOS
