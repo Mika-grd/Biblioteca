@@ -18,7 +18,7 @@ import co.edu.uniquindio.poo.model.Estudiante;
 import co.edu.uniquindio.poo.model.Libro;
 import co.edu.uniquindio.poo.model.Prestamo;
 
-public class BibliotecaTest {
+public class AppTest {
 
     private Biblioteca biblioteca;
     private Bibliotecario bibliotecario1;
